@@ -1,34 +1,23 @@
 {
-    "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
-    "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "name": "makaveli/laravel-query-builder",
+    "description": "Advanced Query Builder for Laravel",
     "keywords": ["laravel", "framework"],
+    "type": "library",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael Udovenko",
+            "email": "mikhail.udovenko.02@mail.ru"
+        }
+    ],
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/framework": "^12.0"
     },
-    "require-dev": {
-        "fakerphp/faker": "^1.23",
-        "laravel/pail": "^1.2.2",
-        "laravel/pint": "^1.13",
-        "laravel/sail": "^1.41",
-        "mockery/mockery": "^1.6",
-        "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3"
-    },
-    "autoload-dev": {
+    "autoload": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "QueryBuilder\\": "src/"
         }
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
-        ]
     },
     "extra": {
         "laravel": {
@@ -36,15 +25,6 @@
             "providers": [
                 "QueryBuilder\\Providers\\QueryBuilderServiceProvider"
             ]
-        }
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "php-http/discovery": true
         }
     },
     "minimum-stability": "stable",
