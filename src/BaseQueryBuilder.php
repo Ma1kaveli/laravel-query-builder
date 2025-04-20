@@ -1,104 +1,102 @@
 <?php
 
-namespace BaseQueryBuilder;
+namespace LaravelQueryBuilder;
 
-use BaseQueryBuilder\DTO\AvailableSorts;
-use BaseQueryBuilder\DTO\DeepWhereHasWhereParam;
-use BaseQueryBuilder\DTO\DeepWhereHasWhereParams;
+use LaravelQueryBuilder\DTO\AvailableSorts;
+use LaravelQueryBuilder\DTO\DeepWhereHasWhereParam;
+use LaravelQueryBuilder\DTO\DeepWhereHasWhereParams;
 
-use BaseQueryBuilder\Filters\Combine\ApplyCrossUponCrossWhereHasWhere;
-use BaseQueryBuilder\Filters\Combine\ApplyDeepWhereHasWhere;
-use BaseQueryBuilder\Filters\Combine\ApplySortByRelationField;
-use BaseQueryBuilder\Filters\Combine\ApplyWhereHasLikeArray;
-use BaseQueryBuilder\Filters\Combine\ApplyWhereHasWhere;
-use BaseQueryBuilder\Filters\Combine\ApplyWhereHasWhereIn;
-use BaseQueryBuilder\Filters\Combine\ApplyWhereHasLike;
+use LaravelQueryBuilder\Filters\Combine\ApplyCrossUponCrossWhereHasWhere;
+use LaravelQueryBuilder\Filters\Combine\ApplyDeepWhereHasWhere;
+use LaravelQueryBuilder\Filters\Combine\ApplySortByRelationField;
+use LaravelQueryBuilder\Filters\Combine\ApplyWhereHasLikeArray;
+use LaravelQueryBuilder\Filters\Combine\ApplyWhereHasWhere;
+use LaravelQueryBuilder\Filters\Combine\ApplyWhereHasWhereIn;
+use LaravelQueryBuilder\Filters\Combine\ApplyWhereHasLike;
 
-use BaseQueryBuilder\Filters\Custom\ApplyWhereNotMe;
+use LaravelQueryBuilder\Filters\Custom\ApplyWhereNotMe;
 
-use BaseQueryBuilder\Filters\Datetime\ApplyDateNotRange;
-use BaseQueryBuilder\Filters\Datetime\ApplyDay;
-use BaseQueryBuilder\Filters\Datetime\ApplyLastYear;
-use BaseQueryBuilder\Filters\Datetime\ApplyToday;
-use BaseQueryBuilder\Filters\Datetime\ApplyDateEnd;
-use BaseQueryBuilder\Filters\Datetime\ApplyDateStart;
-use BaseQueryBuilder\Filters\Datetime\ApplyArrayDate;
-use BaseQueryBuilder\Filters\Datetime\ApplyArrayTime;
-use BaseQueryBuilder\Filters\Datetime\ApplyDate;
-use BaseQueryBuilder\Filters\Datetime\ApplyDateRange;
-use BaseQueryBuilder\Filters\Datetime\ApplyHour;
-use BaseQueryBuilder\Filters\Datetime\ApplyLastMonth;
-use BaseQueryBuilder\Filters\Datetime\ApplyLastWeek;
-use BaseQueryBuilder\Filters\Datetime\ApplyMinute;
-use BaseQueryBuilder\Filters\Datetime\ApplyMonth;
-use BaseQueryBuilder\Filters\Datetime\ApplyCurrentHour;
-use BaseQueryBuilder\Filters\Datetime\ApplyCurrentMinute;
-use BaseQueryBuilder\Filters\Datetime\ApplyTime;
-use BaseQueryBuilder\Filters\Datetime\ApplyTimeEnd;
-use BaseQueryBuilder\Filters\Datetime\ApplyTimeRange;
-use BaseQueryBuilder\Filters\Datetime\ApplyTimeStart;
-use BaseQueryBuilder\Filters\Datetime\ApplyYear;
+use LaravelQueryBuilder\Filters\Datetime\ApplyDateNotRange;
+use LaravelQueryBuilder\Filters\Datetime\ApplyDay;
+use LaravelQueryBuilder\Filters\Datetime\ApplyLastYear;
+use LaravelQueryBuilder\Filters\Datetime\ApplyToday;
+use LaravelQueryBuilder\Filters\Datetime\ApplyDateEnd;
+use LaravelQueryBuilder\Filters\Datetime\ApplyDateStart;
+use LaravelQueryBuilder\Filters\Datetime\ApplyArrayDate;
+use LaravelQueryBuilder\Filters\Datetime\ApplyArrayTime;
+use LaravelQueryBuilder\Filters\Datetime\ApplyDate;
+use LaravelQueryBuilder\Filters\Datetime\ApplyDateRange;
+use LaravelQueryBuilder\Filters\Datetime\ApplyHour;
+use LaravelQueryBuilder\Filters\Datetime\ApplyLastMonth;
+use LaravelQueryBuilder\Filters\Datetime\ApplyLastWeek;
+use LaravelQueryBuilder\Filters\Datetime\ApplyMinute;
+use LaravelQueryBuilder\Filters\Datetime\ApplyMonth;
+use LaravelQueryBuilder\Filters\Datetime\ApplyCurrentHour;
+use LaravelQueryBuilder\Filters\Datetime\ApplyCurrentMinute;
+use LaravelQueryBuilder\Filters\Datetime\ApplyTime;
+use LaravelQueryBuilder\Filters\Datetime\ApplyTimeEnd;
+use LaravelQueryBuilder\Filters\Datetime\ApplyTimeRange;
+use LaravelQueryBuilder\Filters\Datetime\ApplyTimeStart;
+use LaravelQueryBuilder\Filters\Datetime\ApplyYear;
 
-use BaseQueryBuilder\Filters\Geo\ApplyGeoRadius;
+use LaravelQueryBuilder\Filters\Geo\ApplyGeoRadius;
 
-use BaseQueryBuilder\Filters\Logic\ApplyBoolean;
-use BaseQueryBuilder\Filters\Logic\ApplyNotNull;
-use BaseQueryBuilder\Filters\Logic\ApplyNull;
-use BaseQueryBuilder\Filters\Logic\ApplyEmpty;
+use LaravelQueryBuilder\Filters\Logic\ApplyBoolean;
+use LaravelQueryBuilder\Filters\Logic\ApplyNotNull;
+use LaravelQueryBuilder\Filters\Logic\ApplyNull;
+use LaravelQueryBuilder\Filters\Logic\ApplyEmpty;
 
-use BaseQueryBuilder\Filters\Numeric\ApplyArrayInteger;
-use BaseQueryBuilder\Filters\Numeric\ApplyOddNumeric;
-use BaseQueryBuilder\Filters\Numeric\ApplyInteger;
-use BaseQueryBuilder\Filters\Numeric\ApplyArrayDouble;
-use BaseQueryBuilder\Filters\Numeric\ApplyArrayFloat;
-use BaseQueryBuilder\Filters\Numeric\ApplyArrayNumeric;
-use BaseQueryBuilder\Filters\Numeric\ApplyDouble;
-use BaseQueryBuilder\Filters\Numeric\ApplyEvenNumeric;
-use BaseQueryBuilder\Filters\Numeric\ApplyFloat;
-use BaseQueryBuilder\Filters\Numeric\ApplyMultipleOf;
-use BaseQueryBuilder\Filters\Numeric\ApplyNumericRange;
-use BaseQueryBuilder\Filters\Numeric\ApplyNumeric;
-use BaseQueryBuilder\Filters\Numeric\ApplyNumericGreaterThan;
-use BaseQueryBuilder\Filters\Numeric\ApplyNumericLessThan;
-use BaseQueryBuilder\Filters\Numeric\ApplyNumericNotRange;
+use LaravelQueryBuilder\Filters\Numeric\ApplyArrayInteger;
+use LaravelQueryBuilder\Filters\Numeric\ApplyOddNumeric;
+use LaravelQueryBuilder\Filters\Numeric\ApplyInteger;
+use LaravelQueryBuilder\Filters\Numeric\ApplyArrayDouble;
+use LaravelQueryBuilder\Filters\Numeric\ApplyArrayFloat;
+use LaravelQueryBuilder\Filters\Numeric\ApplyArrayNumeric;
+use LaravelQueryBuilder\Filters\Numeric\ApplyDouble;
+use LaravelQueryBuilder\Filters\Numeric\ApplyEvenNumeric;
+use LaravelQueryBuilder\Filters\Numeric\ApplyFloat;
+use LaravelQueryBuilder\Filters\Numeric\ApplyMultipleOf;
+use LaravelQueryBuilder\Filters\Numeric\ApplyNumericRange;
+use LaravelQueryBuilder\Filters\Numeric\ApplyNumeric;
+use LaravelQueryBuilder\Filters\Numeric\ApplyNumericGreaterThan;
+use LaravelQueryBuilder\Filters\Numeric\ApplyNumericLessThan;
+use LaravelQueryBuilder\Filters\Numeric\ApplyNumericNotRange;
 
-use BaseQueryBuilder\Filters\String\ApplyLikeEnd;
-use BaseQueryBuilder\Filters\String\ApplyString;
-use BaseQueryBuilder\Filters\String\ApplyArrayString;
-use BaseQueryBuilder\Filters\String\ApplyLike;
-use BaseQueryBuilder\Filters\String\ApplyJsonContains;
-use BaseQueryBuilder\Filters\String\ApplyJsonKey;
-use BaseQueryBuilder\Filters\String\ApplyLikeStart;
-use BaseQueryBuilder\Filters\String\ApplyRegex;
+use LaravelQueryBuilder\Filters\String\ApplyLikeEnd;
+use LaravelQueryBuilder\Filters\String\ApplyString;
+use LaravelQueryBuilder\Filters\String\ApplyArrayString;
+use LaravelQueryBuilder\Filters\String\ApplyLike;
+use LaravelQueryBuilder\Filters\String\ApplyJsonContains;
+use LaravelQueryBuilder\Filters\String\ApplyJsonKey;
+use LaravelQueryBuilder\Filters\String\ApplyLikeStart;
+use LaravelQueryBuilder\Filters\String\ApplyRegex;
 
-use BaseQueryBuilder\Filters\System\ApplySortBy;
-use BaseQueryBuilder\Filters\System\ApplyWith;
-use BaseQueryBuilder\Filters\System\ApplyWithCount;
-use BaseQueryBuilder\Filters\System\ApplyWithDeleted;
-use BaseQueryBuilder\Filters\System\ApplyBetween;
-use BaseQueryBuilder\Filters\System\ApplyWhere;
-use BaseQueryBuilder\Filters\System\ApplyWhereIn;
-use BaseQueryBuilder\Filters\System\ApplyDistinct;
-use BaseQueryBuilder\Filters\System\ApplyInRandomOrder;
-use BaseQueryBuilder\Filters\System\ApplyLimit;
-use BaseQueryBuilder\Filters\System\ApplySelect;
+use LaravelQueryBuilder\Filters\System\ApplySortBy;
+use LaravelQueryBuilder\Filters\System\ApplyWith;
+use LaravelQueryBuilder\Filters\System\ApplyWithCount;
+use LaravelQueryBuilder\Filters\System\ApplyWithDeleted;
+use LaravelQueryBuilder\Filters\System\ApplyBetween;
+use LaravelQueryBuilder\Filters\System\ApplyWhere;
+use LaravelQueryBuilder\Filters\System\ApplyWhereIn;
+use LaravelQueryBuilder\Filters\System\ApplyDistinct;
+use LaravelQueryBuilder\Filters\System\ApplyInRandomOrder;
+use LaravelQueryBuilder\Filters\System\ApplyLimit;
+use LaravelQueryBuilder\Filters\System\ApplySelect;
 
-use BaseQueryBuilder\Filters\Relation\ApplyHasRelation;
-use BaseQueryBuilder\Filters\Relation\ApplyRelationCount;
+use LaravelQueryBuilder\Filters\Relation\ApplyHasRelation;
+use LaravelQueryBuilder\Filters\Relation\ApplyRelationCount;
 
-use BaseQueryBuilder\Filters\Special\ApplyDomain;
-use BaseQueryBuilder\Filters\Special\ApplyRating;
-use BaseQueryBuilder\Filters\Special\ApplyIpAddress;
-use BaseQueryBuilder\Filters\Special\ApplyStock;
+use LaravelQueryBuilder\Filters\Special\ApplyDomain;
+use LaravelQueryBuilder\Filters\Special\ApplyRating;
+use LaravelQueryBuilder\Filters\Special\ApplyIpAddress;
+use LaravelQueryBuilder\Filters\Special\ApplyStock;
 
-use BaseQueryBuilder\Filters\PaginateFinalizer;
-use BaseQueryBuilder\Filters\GetFinalizer;
+use LaravelQueryBuilder\Filters\PaginateFinalizer;
+use LaravelQueryBuilder\Filters\GetFinalizer;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
@@ -532,7 +530,7 @@ abstract class BaseQueryBuilder
             $field,
             $paramName,
             ['is_or_where' => $isOrWhere],
-            $e
+            $q
         );
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace BaseQueryBuilder\Filters\Custom;
+namespace LaravelQueryBuilder\Filters\Custom;
 
-use BaseQueryBuilder\Interfaces\FilterInterface;
-use BaseQueryBuilder\Traits\GetTableField;
+use LaravelQueryBuilder\Interfaces\FilterInterface;
+use LaravelQueryBuilder\Traits\GetTableField;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;

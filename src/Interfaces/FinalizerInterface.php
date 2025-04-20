@@ -1,6 +1,6 @@
 <?php
 
-namespace BaseQueryBuilder\Interfaces;
+namespace LaravelQueryBuilder\Interfaces;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

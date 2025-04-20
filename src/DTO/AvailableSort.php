@@ -1,6 +1,6 @@
 <?php
 
-namespace BaseQueryBuilder\DTO;
+namespace LaravelQueryBuilder\DTO;
 
 class AvailableSort
 {

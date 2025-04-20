@@ -1,8 +1,8 @@
 <?php
 
-namespace BaseQueryBuilder\Converter;
+namespace LaravelQueryBuilder\Converter;
 
-use BaseQueryBuilder\Converter\Constants\CaseConstants;
+use LaravelQueryBuilder\Converter\Constants\CaseConstants;
 
 use Illuminate\Support\Str;
 use InvalidArgumentException;

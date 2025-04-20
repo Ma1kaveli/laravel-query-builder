@@ -1,6 +1,6 @@
 <?php
 
-namespace BaseQueryBuilder\Helpers;
+namespace LaravelQueryBuilder\Helpers;
 
 use Carbon\Carbon;
 use Carbon\Month;

@@ -1,6 +1,6 @@
 <?php
 
-namespace BaseQueryBuilder\Traits;
+namespace LaravelQueryBuilder\Traits;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

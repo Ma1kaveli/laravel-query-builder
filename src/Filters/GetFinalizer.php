@@ -1,8 +1,8 @@
 <?php
 
-namespace BaseQueryBuilder\Filters;
+namespace LaravelQueryBuilder\Filters;
 
-use BaseQueryBuilder\Interfaces\FinalizerInterface;
+use LaravelQueryBuilder\Interfaces\FinalizerInterface;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

@@ -1,9 +1,9 @@
 <?php
 
-namespace BaseQueryBuilder\Converter\Middleware;
+namespace LaravelQueryBuilder\Converter\Middleware;
 
-use BaseQueryBuilder\Converter\CaseConverter;
-use BaseQueryBuilder\Converter\Constants\CaseConstants;
+use LaravelQueryBuilder\Converter\CaseConverter;
+use LaravelQueryBuilder\Converter\Constants\CaseConstants;
 
 use Closure;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +16,7 @@ class ConvertResponseToCamelCase
      *
      * @param Request $request
      * @param Closure $next
-     * 
+     *
      * @return mixed
      */
     public function handle(Request $request, Closure $next): mixed

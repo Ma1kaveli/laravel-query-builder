@@ -1,6 +1,6 @@
 <?php
 
-namespace BaseQueryBuilder\Converter\Constants;
+namespace LaravelQueryBuilder\Converter\Constants;
 
 class CaseConstants {
     const CASE_SNAKE = 'snake';

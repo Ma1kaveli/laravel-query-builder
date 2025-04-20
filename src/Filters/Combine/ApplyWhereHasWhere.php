@@ -1,9 +1,9 @@
 <?php
 
-namespace BaseQueryBuilder\Filters\Combine;
+namespace LaravelQueryBuilder\Filters\Combine;
 
-use BaseQueryBuilder\Interfaces\FilterInterface;
-use BaseQueryBuilder\Traits\GetTableField;
+use LaravelQueryBuilder\Interfaces\FilterInterface;
+use LaravelQueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

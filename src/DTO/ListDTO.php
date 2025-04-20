@@ -1,8 +1,8 @@
 <?php
 
-namespace BaseQueryBuilder\DTO;
+namespace LaravelQueryBuilder\DTO;
 
-use BaseQueryBuilder\Converter\DTO\ConverterDTO;
+use LaravelQueryBuilder\Converter\DTO\ConverterDTO;
 
 use Illuminate\Http\Request;
 

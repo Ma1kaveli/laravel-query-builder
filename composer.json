@@ -23,7 +23,7 @@
         "laravel": {
             "dont-discover": [],
             "providers": [
-                "QueryBuilder\\Providers\\QueryBuilderServiceProvider"
+                "LaravelQueryBuilder\\Providers\\QueryBuilderServiceProvider"
             ]
         }
     },

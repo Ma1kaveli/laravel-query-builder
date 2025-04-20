@@ -1,9 +1,9 @@
 <?php
 
-namespace BaseQueryBuilder\Filters\Datetime;
+namespace LaravelQueryBuilder\Filters\Datetime;
 
-use BaseQueryBuilder\Interfaces\FilterInterface;
-use BaseQueryBuilder\Traits\GetTableField;
+use LaravelQueryBuilder\Interfaces\FilterInterface;
+use LaravelQueryBuilder\Traits\GetTableField;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;

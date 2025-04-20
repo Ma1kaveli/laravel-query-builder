@@ -1,10 +1,10 @@
 <?php
 
-namespace BaseQueryBuilder\Filters\String;
+namespace LaravelQueryBuilder\Filters\String;
 
-use BaseQueryBuilder\Helpers\CheckTypes;
-use BaseQueryBuilder\Interfaces\FilterInterface;
-use BaseQueryBuilder\Traits\GetTableField;
+use LaravelQueryBuilder\Helpers\CheckTypes;
+use LaravelQueryBuilder\Interfaces\FilterInterface;
+use LaravelQueryBuilder\Traits\GetTableField;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
