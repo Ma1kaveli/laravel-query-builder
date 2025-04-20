@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "QueryBuilder\\": "src/"
+            "LaravelQueryBuilder\\": "src/"
         }
     },
     "extra": {
