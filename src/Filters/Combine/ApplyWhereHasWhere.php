@@ -1,0 +1,42 @@
+<?php
+
+namespace BaseQueryBuilder\Filters\Combine;
+
+use BaseQueryBuilder\Interfaces\FilterInterface;
+use BaseQueryBuilder\Traits\GetTableField;
+
+use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+
+class ApplyWhereHasWhere implements FilterInterface
+{
+    use GetTableField;
+
+    /**
+     * apply
+     *
+     * @param EloquentQueryBuilder|QueryBuilder $query
+     * @param string|array|null $field = null
+     * @param mixed $value
+     * @param mixed $options = []
+     *
+     * @return void
+     */
+    public function apply(
+        EloquentQueryBuilder|QueryBuilder $query,
+        string|array|null $field = null,
+        mixed $value,
+        mixed $options = []
+    ): void {
+        $value = trim(mb_strtolower($value));
+
+        $isOrWhere = $options['is_or_where'];
+        $relationship = $options['relationship'];
+
+        $query->when(
+            $isOrWhere,
+            fn ($q) => $q->orWhereHas($relationship, fn ($rQ) => $q->where($field, $value)),
+            fn ($q) => $q->whereHas($relationship, fn ($rQ) => $q->where($field, $value)),
+        );
+    }
+}
