@@ -327,11 +327,11 @@ class BaseRepository
     /**
      * getPaginatedList
      *
-     * @param  ListDTO $dto
+     * @param ListDTO|mixed $dto
      *
-     * @return mixed
+     * @return LengthAwarePaginator
      */
-    public function getPaginatedList(ListDTO $dto): LengthAwarePaginator
+    public function getPaginatedList(mixed $dto): LengthAwarePaginator
     {
         return $this->model->filter($dto->params)->list();
     }

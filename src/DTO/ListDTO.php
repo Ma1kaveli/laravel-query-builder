@@ -4,6 +4,7 @@ namespace LaravelQueryBuilder\DTO;
 
 use LaravelQueryBuilder\Converter\DTO\ConverterDTO;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ListDTO {
@@ -19,6 +20,8 @@ class ListDTO {
      * @return ListDTO
      */
     public static function fromRequest(Request $request, array $params = [], array $mapParams = []): ListDTO {
+        $authUser = Auth::user();
+
         $convertDTO = ConverterDTO::getQueryParams(
             $request,
             [
@@ -31,6 +34,8 @@ class ListDTO {
         return new self(
             params: [
                 ...$convertDTO,
+                'auth_user' => $authUser,
+                'auth_user_id' => $authUser->id ?? null,
             ],
         );
     }

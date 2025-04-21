@@ -169,7 +169,7 @@ abstract class BaseQueryBuilder
      */
     protected function latest(array|string $columns = ['*'])
     {
-        return $this->query->latest();
+        return $this->query->latest($columns);
     }
 
     /**
