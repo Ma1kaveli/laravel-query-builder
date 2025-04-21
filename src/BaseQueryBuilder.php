@@ -149,6 +149,30 @@ abstract class BaseQueryBuilder
     }
 
     /**
+     * first
+     *
+     * @param array|string $columns = ['*']
+     *
+     * @return mixed
+     */
+    protected function first(array|string $columns = ['*'])
+    {
+        return $this->query->first($columns);
+    }
+
+    /**
+     * latest
+     *
+     * @param array|string $columns = ['*']
+     *
+     * @return mixed
+     */
+    protected function latest(array|string $columns = ['*'])
+    {
+        return $this->query->latest();
+    }
+
+    /**
      * applyPaginate
      *
      * @param bool $canAllRows = false
@@ -156,7 +180,7 @@ abstract class BaseQueryBuilder
      * @param string $rowsPerPageName = 'rows_per_page'
      * @param string $pageName = 'page'
      *
-     * @return void
+     * @return LengthAwarePaginator
      */
     protected function applyPaginate(
         bool $canAllRows = false,
