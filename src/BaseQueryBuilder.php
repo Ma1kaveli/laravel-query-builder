@@ -2948,7 +2948,7 @@ abstract class BaseQueryBuilder
      * applyWhereHasLikeArray
      *
      * @param string $relationship
-     * @param string $field
+     * @param array|string $field
      * @param ?string $paramName = null
      * @param bool $useOrWhereInArray = true
      * @param bool $isOrWhere = false
@@ -2958,7 +2958,7 @@ abstract class BaseQueryBuilder
      */
     protected function applyWhereHasLikeArray(
         string $relationship,
-        string $field,
+        array|string $field,
         ?string $paramName = null,
         bool $useOrWhereInArray = true,
         bool $isOrWhere = false,
