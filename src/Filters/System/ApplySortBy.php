@@ -34,14 +34,16 @@ class ApplySortBy implements FilterInterface
         $availableSorts = $options['available_sorts'];
         $defaultField = $options['default_field'];
 
-        if (!CheckTypes::isString($sortBy)) {
+        $isAvailableSortBy = !in_array($sortBy, $availableSorts);
+
+        if (!CheckTypes::isString($sortBy) || ($isAvailableSortBy && ($defaultField === null))) {
             return;
         }
 
         $direction = (!CheckTypes::isString($descending) || $descending === 'false')
             ? 'asc' : 'desc';
 
-        if (!in_array($sortBy, $availableSorts)) {
+        if (!$isAvailableSortBy) {
             $sortBy = $defaultField;
         }
 

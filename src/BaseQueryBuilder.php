@@ -308,7 +308,7 @@ abstract class BaseQueryBuilder
      * sortBy
      *
      * @param array<string> $availableSorts
-     * @param string $defaultField = 'id'
+     * @param ?string $defaultField = 'id'
      * @param string $paramName = 'sort_by'
      * @param string $directionParamName = 'descending'
      *
@@ -316,7 +316,7 @@ abstract class BaseQueryBuilder
      */
     protected function sortBy(
         array $availableSorts,
-        string $defaultField = 'id',
+        ?string $defaultField = 'id',
         string $paramName = 'sort_by',
         string $directionParamName = 'descending',
     ): void {
