@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7308ab5eeb9554b7c0654c27ac260cda",
+    "content-hash": "917880eb2417e9b68b1db83e19ec3df6",
     "packages": [
         {
             "name": "brick/math",
@@ -1939,6 +1939,58 @@
                 }
             ],
             "time": "2024-12-08T08:18:47+00:00"
+        },
+        {
+            "name": "makaveli/laravel-converter",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ma1kaveli/laravel-converter.git",
+                "reference": "7b7ac8be77f607921812be6e7d9d0b8735e09749"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ma1kaveli/laravel-converter/zipball/7b7ac8be77f607921812be6e7d9d0b8735e09749",
+                "reference": "7b7ac8be77f607921812be6e7d9d0b8735e09749",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^10.10|^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "dont-discover": [],
+                    "providers": [
+                        "LaravelConverter\\Providers\\ConverterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelConverter\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Udovenko",
+                    "email": "mikhail.udovenko.02@mail.ru"
+                }
+            ],
+            "description": "Advanced Converter utils for Laravel",
+            "keywords": [
+                "framework",
+                "laravel"
+            ],
+            "support": {
+                "source": "https://github.com/Ma1kaveli/laravel-converter/tree/1.0.1",
+                "issues": "https://github.com/Ma1kaveli/laravel-converter/issues"
+            },
+            "time": "2025-04-25T12:57:30+00:00"
         },
         {
             "name": "monolog/monolog",

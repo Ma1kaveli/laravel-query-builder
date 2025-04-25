@@ -10,4 +10,19 @@ return [
         'user_id_field' => 'id',
         'is_root_field' => 'is_superadministrator',
     ],
+
+    'pagination_map' => [
+        'current_page' => 'current_page',
+        'first_page_url' => 'first_page_url',
+        'from' => 'from',
+        'last_page' => 'last_page',
+        'last_page_url' => 'last_page_url',
+        'links' => 'links',
+        'next_page_url' => 'next_page_url',
+        'path' => 'path',
+        'per_page' => 'per_page',
+        'prev_page_url' => 'prev_page_url',
+        'to' => 'to',
+        'total' => 'total',
+    ],
 ];
