@@ -13,11 +13,11 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^10.10|^11.0|^12.0",
-        "makaveli/laravel-converter": "1.0.1"
+        "makaveli/laravel-converter": "1.0.3"
     },
     "autoload": {
         "psr-4": {
-            "LaravelQueryBuilder\\": "src/"
+            "QueryBuilder\\": "src/"
         }
     },
     "repositories": [
@@ -30,7 +30,7 @@
         "laravel": {
             "dont-discover": [],
             "providers": [
-                "LaravelQueryBuilder\\Providers\\QueryBuilderServiceProvider"
+                "QueryBuilder\\Providers\\QueryBuilderServiceProvider"
             ]
         }
     },

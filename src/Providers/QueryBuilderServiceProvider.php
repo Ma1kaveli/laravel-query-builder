@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelQueryBuilder\Providers;
+namespace QueryBuilder\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

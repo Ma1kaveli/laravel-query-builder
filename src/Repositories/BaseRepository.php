@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelQueryBuilder\Repositories;
+namespace QueryBuilder\Repositories;
 
-use LaravelQueryBuilder\DTO\ListDTO;
+use QueryBuilder\DTO\ListDTO;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;

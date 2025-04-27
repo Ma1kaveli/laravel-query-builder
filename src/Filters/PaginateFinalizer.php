@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelQueryBuilder\Filters;
+namespace QueryBuilder\Filters;
 
-use LaravelQueryBuilder\Helpers\CheckTypes;
-use LaravelQueryBuilder\Interfaces\FinalizerInterface;
+use QueryBuilder\Helpers\CheckTypes;
+use QueryBuilder\Interfaces\FinalizerInterface;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

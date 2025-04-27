@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelQueryBuilder\Traits;
+namespace QueryBuilder\Traits;
 
 trait Filterable {
     /**

@@ -1,9 +1,9 @@
 <?php
 
-namespace LaravelQueryBuilder\Filters\String;
+namespace QueryBuilder\Filters\String;
 
-use LaravelQueryBuilder\Interfaces\FilterInterface;
-use LaravelQueryBuilder\Traits\GetTableField;
+use QueryBuilder\Interfaces\FilterInterface;
+use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;

@@ -1,8 +1,8 @@
 <?php
 
-namespace LaravelQueryBuilder\DTO;
+namespace QueryBuilder\DTO;
 
-use LaravelConverter\DTO\ConverterDTO;
+use Converter\DTO\ConverterDTO;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelQueryBuilder\Resources;
+namespace QueryBuilder\Resources;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\ResourceCollection;

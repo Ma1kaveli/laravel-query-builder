@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelQueryBuilder\DTO;
+namespace QueryBuilder\DTO;
 
 class DeepWhereHasWhereParam
 {
