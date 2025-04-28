@@ -74,6 +74,66 @@ class BaseRepository
     }
 
     /**
+     * isUnique
+     *
+     * @param mixed $dto
+     * @param array $mapParams - example [
+     *      'name' => [
+     *           'column' => \DB::raw('LOWER(name)'),
+     *           'modifier' => fn($v) => trim(strtolower($v)),
+     *           'is_or_where' => false
+     *       ],
+     *       'organizationId' => 'organization_id',
+     *   ]
+     * @param bool $exceptIfExist = true
+     * @param string $exceptMessage = 'Нельзя дублировать записи'
+     * @param string $excludeKey = 'id'
+     * @param string $excludeColumn = 'id'
+     *
+     * @return bool|\Exception
+     */
+    public function isUnique(
+        mixed $dto,
+        array $mapParams,
+        bool $exceptIfExist = true,
+        string $exceptMessage = 'Нельзя дублировать записи',
+        string $excludeKey = 'id',
+        string $excludeColumn = 'id'
+    ): bool|\Exception {
+        $query = $this->model;
+
+        if (isset($dto->{$excludeKey}) && !empty($dto->{$excludeKey})) {
+            $query->where($excludeColumn, '!=', $dto->{$excludeKey});
+        }
+
+        foreach ($mapParams as $dtoProperty => $mapping) {
+            if (!isset($dto->{$dtoProperty})) {
+                continue;
+            }
+
+            $value = $dto->{$dtoProperty};
+
+            $column = is_array($mapping) ? ($mapping['column'] ?? null) : $mapping;
+            $modifier = is_array($mapping) ? ($mapping['modifier'] ?? null) : null;
+            $isOrWhere = is_array($mapping) ? ($mapping['is_or_where'] ?? false) : false;
+
+            if ($modifier && is_callable($modifier)) {
+                $value = $modifier($value);
+            }
+
+            $query->where($column, $value, null, $isOrWhere ? 'or' : 'and');
+        }
+
+        $isUnique = !$query->exists();
+
+        if ($exceptIfExist && $isUnique) {
+            throw new \Exception($exceptMessage, 404);
+        }
+
+        return $isUnique;
+    }
+
+    /**
      * @param string $column
      * @param $value
      *
