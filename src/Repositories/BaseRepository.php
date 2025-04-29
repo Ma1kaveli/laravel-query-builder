@@ -126,7 +126,7 @@ class BaseRepository
 
         $isUnique = !$query->exists();
 
-        if ($exceptIfExist && $isUnique) {
+        if ($exceptIfExist && !$isUnique) {
             throw new \Exception($exceptMessage, 404);
         }
 

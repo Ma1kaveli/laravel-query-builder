@@ -1,6 +1,6 @@
 {
     "name": "makaveli/laravel-query-builder",
-    "description": "Advanced Query Builder for Laravel",
+    "description": "Query Builder for Laravel",
     "keywords": ["laravel", "framework"],
     "type": "library",
     "license": "MIT",
