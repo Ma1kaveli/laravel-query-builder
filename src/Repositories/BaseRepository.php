@@ -103,7 +103,7 @@ class BaseRepository
         $query = $this->model;
 
         if (isset($dto->{$excludeKey}) && !empty($dto->{$excludeKey})) {
-            $query->where($excludeColumn, '!=', $dto->{$excludeKey});
+            $query = $query->where($excludeColumn, '!=', $dto->{$excludeKey});
         }
 
         foreach ($mapParams as $dtoProperty => $mapping) {
@@ -121,7 +121,7 @@ class BaseRepository
                 $value = $modifier($value);
             }
 
-            $query->where($column, $value, null, $isOrWhere ? 'or' : 'and');
+            $query = $query->where($column, $value, null, $isOrWhere ? 'or' : 'and');
         }
 
         $isUnique = !$query->exists();
