@@ -37,8 +37,8 @@ class ApplyWhereHasWhereIn implements FilterInterface
 
         $query->when(
             $isOrWhere,
-            fn ($q) => $q->orWhereHas($relationship, fn ($rQ) => $q->whereIn($field, $value)),
-            fn ($q) => $q->whereHas($relationship, fn ($rQ) => $q->whereIn($field, $value)),
+            fn ($q) => $q->orWhereHas($relationship, fn ($rQ) => $rQ->whereIn($field, $value)),
+            fn ($q) => $q->whereHas($relationship, fn ($rQ) => $rQ->whereIn($field, $value)),
         );
     }
 }

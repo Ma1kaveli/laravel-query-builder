@@ -35,8 +35,8 @@ class ApplyWhereHasWhere implements FilterInterface
 
         $query->when(
             $isOrWhere,
-            fn ($q) => $q->orWhereHas($relationship, fn ($rQ) => $q->where($field, $value)),
-            fn ($q) => $q->whereHas($relationship, fn ($rQ) => $q->where($field, $value)),
+            fn ($q) => $q->orWhereHas($relationship, fn ($rQ) => $rQ->where($field, $value)),
+            fn ($q) => $q->whereHas($relationship, fn ($rQ) => $rQ->where($field, $value)),
         );
     }
 }
