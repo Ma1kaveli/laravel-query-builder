@@ -106,23 +106,25 @@ class BaseRepository
             $query = $query->where($excludeColumn, '!=', $dto->{$excludeKey});
         }
 
-        foreach ($mapParams as $dtoProperty => $mapping) {
-            if (!isset($dto->{$dtoProperty})) {
-                continue;
+        $query = $query->where(function ($q) use ($mapParams, $dto) {
+            foreach ($mapParams as $dtoProperty => $mapping) {
+                if (!isset($dto->{$dtoProperty})) {
+                    continue;
+                }
+
+                $value = $dto->{$dtoProperty};
+
+                $column = is_array($mapping) ? ($mapping['column'] ?? null) : $mapping;
+                $modifier = is_array($mapping) ? ($mapping['modifier'] ?? null) : null;
+                $isOrWhere = is_array($mapping) ? ($mapping['is_or_where'] ?? false) : false;
+
+                if ($modifier && is_callable($modifier)) {
+                    $value = $modifier($value);
+                }
+
+                $q->where($column, $value, null, $isOrWhere ? 'or' : 'and');
             }
-
-            $value = $dto->{$dtoProperty};
-
-            $column = is_array($mapping) ? ($mapping['column'] ?? null) : $mapping;
-            $modifier = is_array($mapping) ? ($mapping['modifier'] ?? null) : null;
-            $isOrWhere = is_array($mapping) ? ($mapping['is_or_where'] ?? false) : false;
-
-            if ($modifier && is_callable($modifier)) {
-                $value = $modifier($value);
-            }
-
-            $query = $query->where($column, $value, null, $isOrWhere ? 'or' : 'and');
-        }
+        });
 
         $isUnique = !$query->exists();
 
