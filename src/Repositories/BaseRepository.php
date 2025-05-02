@@ -102,7 +102,7 @@ class BaseRepository
     ): bool|\Exception {
         $query = $this->model;
 
-        if (isset($dto->{$excludeKey}) && !empty($dto->{$excludeKey})) {
+        if (isset($dto->{$excludeKey}) && $dto->{$excludeKey} !== null && $dto->{$excludeKey} !== '') {
             $query = $query->where($excludeColumn, '!=', $dto->{$excludeKey});
         }
 
