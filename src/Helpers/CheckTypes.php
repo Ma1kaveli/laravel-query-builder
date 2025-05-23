@@ -17,7 +17,7 @@ class CheckTypes {
     static public function isInteger(mixed $value): bool
     {
         try {
-            return is_int($value);
+            return is_int($value) || (is_string($value) && (string)(int)$value === $value);
         } catch (Exception $e) {
             return false;
         }
@@ -31,7 +31,15 @@ class CheckTypes {
     static public function isFloat(mixed $value): bool
     {
         try {
-            return is_float($value);
+            if (!is_string($value) || self::isInteger($value)) {
+                return false;
+            }
+
+            if (is_float($value)) {
+                return true;
+            }
+
+            return filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
         } catch (Exception $e) {
             return false;
         }
@@ -45,7 +53,15 @@ class CheckTypes {
     static public function isDouble(mixed $value): bool
     {
         try {
-            return is_double($value);
+            if (!is_string($value) || self::isInteger($value)) {
+                return false;
+            }
+
+            if (is_double($value)) {
+                return true;
+            }
+
+            return filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
         } catch (Exception $e) {
             return false;
         }

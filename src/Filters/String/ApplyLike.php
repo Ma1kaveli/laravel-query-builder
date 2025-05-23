@@ -37,7 +37,7 @@ class ApplyLike implements FilterInterface
         $value = str_replace(
             ['%', '_'],
             ['\%', '\_'],
-            trim(mb_strtolower($value))
+            trim(strtolower($value))
         );
 
         if (!is_array($field)) {

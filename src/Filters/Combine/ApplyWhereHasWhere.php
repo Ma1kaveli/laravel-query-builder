@@ -28,7 +28,7 @@ class ApplyWhereHasWhere implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $value = trim(mb_strtolower($value));
+        $value = trim(strtolower($value));
 
         $isOrWhere = $options['is_or_where'];
         $relationship = $options['relationship'];

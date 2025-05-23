@@ -33,6 +33,8 @@ class ApplyWhereHasLikeArray implements FilterInterface
             $field = [$field];
         }
 
+        $value = trim(strtolower($value));
+
         $isDeepOrWhere = $options['is_deep_or_where'];
         $isOrWhere = $options['is_or_where'];
         $relationship = $options['relationship'];
