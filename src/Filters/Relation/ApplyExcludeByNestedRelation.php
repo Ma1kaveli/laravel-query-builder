@@ -1,15 +1,14 @@
 <?php
 
-namespace QueryBuilder\Filters\System;
+namespace QueryBuilder\Filters\Relation;
 
-use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class ApplyWithDeleted implements FilterInterface
+class ApplyExcludeByNestedRelation implements FilterInterface
 {
     use GetTableField;
 
@@ -27,14 +26,25 @@ class ApplyWithDeleted implements FilterInterface
         EloquentQueryBuilder|QueryBuilder $query,
         string|array|null $field = null,
         mixed $value,
-        mixed $options = []
+        mixed $options = [],
     ): void {
-        if (!CheckTypes::isBool($value)) {
+        if (!$value) {
             return;
         }
 
-        if ($value === "true" || $value === true) {
-            $query->withTrashed();
+        $relation       = $options['relation'];
+        $nestedRelation = $options['nested_relation'];
+        $isOrWhere      = $options['is_or_where'] ?? false;
+
+        if (!$relation || !$nestedRelation) {
+            return;
         }
+
+        $method = $isOrWhere ? 'orWhereDoesntHave' : 'whereDoesntHave';
+
+        $query->{$method}($relation, function ($q) use ($nestedRelation) {
+            $q->whereHas($nestedRelation);
+        });
     }
 }
+

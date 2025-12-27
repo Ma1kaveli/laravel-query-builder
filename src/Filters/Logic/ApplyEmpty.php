@@ -34,8 +34,8 @@ class ApplyEmpty implements FilterInterface
 
         $query->where(function($q) use ($fieldWithTable) {
             $q->whereNull($fieldWithTable)
-              ->orWhere($fieldWithTable, '')
-              ->orWhereJsonLength($fieldWithTable, 0);
+                ->orWhere($fieldWithTable, '')
+                ->orWhereJsonLength($fieldWithTable, 0);
         }, null, null, $isOrWhere ? 'or' : 'and');
     }
 }

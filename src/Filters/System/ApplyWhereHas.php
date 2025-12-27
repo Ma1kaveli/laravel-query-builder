@@ -2,14 +2,14 @@
 
 namespace QueryBuilder\Filters\System;
 
-use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use QueryBuilder\Helpers\CheckTypes;
 
-class ApplyWithDeleted implements FilterInterface
+class ApplyWhereHas implements FilterInterface
 {
     use GetTableField;
 
@@ -29,12 +29,21 @@ class ApplyWithDeleted implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isBool($value)) {
-            return;
-        }
+        if (!CheckTypes::isString($field)) return;
 
-        if ($value === "true" || $value === true) {
-            $query->withTrashed();
-        }
+        $isOrWhere = $options['is_or_where'];
+        $subQuery = $options['sub_query'];
+
+        $query->when(
+            $isOrWhere,
+            fn ($q) => $q->orWhereHas(
+                $field,
+                fn ($rQ) => $subQuery($rQ)
+            ),
+            fn ($q) => $q->whereHas(
+                $field,
+                fn ($rQ) => $subQuery($rQ)
+            ),
+        );
     }
 }

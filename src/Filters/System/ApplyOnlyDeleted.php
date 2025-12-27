@@ -9,7 +9,7 @@ use QueryBuilder\Traits\GetTableField;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class ApplyWithDeleted implements FilterInterface
+class ApplyOnlyDeleted implements FilterInterface
 {
     use GetTableField;
 
@@ -34,7 +34,7 @@ class ApplyWithDeleted implements FilterInterface
         }
 
         if ($value === "true" || $value === true) {
-            $query->withTrashed();
+            $query->onlyTrashed();
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace QueryBuilder\Filters\System;
+namespace QueryBuilder\Filters\Custom;
 
 use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Interfaces\FilterInterface;
@@ -9,7 +9,7 @@ use QueryBuilder\Traits\GetTableField;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class ApplyWithDeleted implements FilterInterface
+class ApplyArchived implements FilterInterface
 {
     use GetTableField;
 
@@ -29,12 +29,14 @@ class ApplyWithDeleted implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isBool($value)) {
+        if (!CheckTypes::isBool($value) && !is_null($value)) {
             return;
         }
 
-        if ($value === "true" || $value === true) {
-            $query->withTrashed();
+        if ($value === 'true' || $value === true) {
+            $query->onlyTrashed();      // only archived
+        } elseif ($value === null) {
+            $query->withTrashed();      // all rows
         }
     }
 }

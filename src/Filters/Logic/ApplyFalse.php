@@ -1,15 +1,14 @@
 <?php
 
-namespace QueryBuilder\Filters\System;
+namespace QueryBuilder\Filters\Logic;
 
-use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class ApplyWithDeleted implements FilterInterface
+class ApplyFalse implements FilterInterface
 {
     use GetTableField;
 
@@ -27,14 +26,15 @@ class ApplyWithDeleted implements FilterInterface
         EloquentQueryBuilder|QueryBuilder $query,
         string|array|null $field = null,
         mixed $value,
-        mixed $options = []
+        mixed $options = [],
     ): void {
-        if (!CheckTypes::isBool($value)) {
-            return;
-        }
+        $isOrWhere = $options['is_or_where'];
 
-        if ($value === "true" || $value === true) {
-            $query->withTrashed();
-        }
+        $query->where(
+            $this->getFieldWithTable($query, $field),
+            false,
+            null,
+            $isOrWhere ? 'or' : 'and'
+        );
     }
 }

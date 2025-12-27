@@ -13,8 +13,10 @@ use QueryBuilder\Filters\Combine\ApplyWhereHasLikeArray;
 use QueryBuilder\Filters\Combine\ApplyWhereHasWhere;
 use QueryBuilder\Filters\Combine\ApplyWhereHasWhereIn;
 use QueryBuilder\Filters\Combine\ApplyWhereHasLike;
+use QueryBuilder\Filters\Combine\ApplyWhereHasNull;
 
 use QueryBuilder\Filters\Custom\ApplyWhereNotMe;
+use QueryBuilder\Filters\Custom\ApplyArchived;
 
 use QueryBuilder\Filters\Datetime\ApplyDateNotRange;
 use QueryBuilder\Filters\Datetime\ApplyDay;
@@ -45,6 +47,9 @@ use QueryBuilder\Filters\Logic\ApplyBoolean;
 use QueryBuilder\Filters\Logic\ApplyNotNull;
 use QueryBuilder\Filters\Logic\ApplyNull;
 use QueryBuilder\Filters\Logic\ApplyEmpty;
+use QueryBuilder\Filters\Logic\ApplyFalse;
+use QueryBuilder\Filters\Logic\ApplyTrue;
+use QueryBuilder\Filters\Logic\ApplyExistsByBoolean;
 
 use QueryBuilder\Filters\Numeric\ApplyArrayInteger;
 use QueryBuilder\Filters\Numeric\ApplyOddNumeric;
@@ -75,6 +80,7 @@ use QueryBuilder\Filters\System\ApplySortBy;
 use QueryBuilder\Filters\System\ApplyWith;
 use QueryBuilder\Filters\System\ApplyWithCount;
 use QueryBuilder\Filters\System\ApplyWithDeleted;
+use QueryBuilder\Filters\System\ApplyOnlyDeleted;
 use QueryBuilder\Filters\System\ApplyBetween;
 use QueryBuilder\Filters\System\ApplyWhere;
 use QueryBuilder\Filters\System\ApplyWhereIn;
@@ -82,9 +88,11 @@ use QueryBuilder\Filters\System\ApplyDistinct;
 use QueryBuilder\Filters\System\ApplyInRandomOrder;
 use QueryBuilder\Filters\System\ApplyLimit;
 use QueryBuilder\Filters\System\ApplySelect;
+use QueryBuilder\Filters\System\ApplyWhereHas;
 
 use QueryBuilder\Filters\Relation\ApplyHasRelation;
 use QueryBuilder\Filters\Relation\ApplyRelationCount;
+use QueryBuilder\Filters\Relation\ApplyExcludeByNestedRelation;
 
 use QueryBuilder\Filters\Special\ApplyDomain;
 use QueryBuilder\Filters\Special\ApplyRating;
@@ -99,6 +107,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Closure;
 
 abstract class BaseQueryBuilder
 {
@@ -170,6 +179,19 @@ abstract class BaseQueryBuilder
     protected function latest(array|string $columns = ['*'])
     {
         return $this->query->latest($columns);
+    }
+
+    /**
+     * Summary of tap
+     *
+     * @param callable(self): void $callback
+     *
+     * @return \QueryBuilder\BaseQueryBuilder
+     */
+    public function tap(callable $callback): static
+    {
+        $callback($this);
+        return $this;
     }
 
     /**
@@ -255,6 +277,22 @@ abstract class BaseQueryBuilder
     {
         $this->applyFilter(
             ApplyWithDeleted::class,
+            null,
+            $paramName,
+        );
+    }
+
+    /**
+     * Summary of applyOnlyDeleted
+     *
+     * @param string $paramName = 'only_deleted'
+     *
+     * @return void
+     */
+    public function applyOnlyDeleted(string $paramName = 'only_deleted')
+    {
+        $this->applyFilter(
+            ApplyOnlyDeleted::class,
             null,
             $paramName,
         );
@@ -388,14 +426,32 @@ abstract class BaseQueryBuilder
         ?EloquentQueryBuilder $q = null,
     ): void {
         (new ApplyWhereNotMe())->apply(
-            $q ?? $this->query,
-            $field,
-            null,
+            query: $q ?? $this->query,
+            field: $field,
+            value: null,
         );
+    }
 
-        $this->query->where(function ($q) {
-
-        });
+    /**
+     * Summary of applyArchived
+     *
+     * @param string $field
+     * @param ?EloquentQueryBuilder $q $q
+     *
+     * @return void
+     */
+    public function applyArchived(
+        string $field = 'archived',
+        ?EloquentQueryBuilder $q = null,
+    ): void {
+        $this->applyFilter(
+            filterClass: ApplyArchived::class,
+            field: $field,
+            paramName: null,
+            options: [],
+            q: $q,
+            valueCanBeNull: true
+        );
     }
 
     /**
@@ -435,6 +491,139 @@ abstract class BaseQueryBuilder
             $paramName,
             ['is_or_where' => $isOrWhere],
             $q
+        );
+    }
+
+    /**
+     * Summary of applyExistsByBoolean
+     *
+     * @param string $field
+     * @param string $filterableField
+     * @param ?string $paramName
+     * @param bool $invert
+     * @param bool $isOrWhere
+     * @param ?EloquentQueryBuilder $q
+     *
+     * @return void
+     */
+    protected function applyExistsByBoolean(
+        string $field,
+        string $filterableField,
+        ?string $paramName = null,
+        bool $invert = false,
+        bool $isOrWhere = false,
+        ?EloquentQueryBuilder $q = null,
+    ): void {
+        $options = [
+            'invert' => $invert,
+            'filterable_field' => $filterableField,
+            'is_or_where' => $isOrWhere
+        ];
+
+        $this->applyFilter(
+            filterClass: ApplyExistsByBoolean::class,
+            field: $field,
+            paramName: $paramName,
+            options: $options,
+            q: $q
+        );
+    }
+
+    /**
+     * Summary of applyWhereHas
+     *
+     * @param string $relationship
+     * @param Closure $subQuery
+     * @param bool $isOrWhere
+     * @param ?EloquentQueryBuilder $q $q
+     *
+     * @return void
+     */
+    protected function applyWhereHas(
+        string $relationship,
+        Closure $subQuery,
+        bool $isOrWhere = false,
+        ?EloquentQueryBuilder $q = null,
+    ): void {
+        $options = [
+            'is_or_where' => $isOrWhere,
+            'sub_query' => $subQuery,
+        ];
+
+        $this->applyFilter(
+            filterClass: ApplyWhereHas::class,
+            field: $relationship,
+            paramName: null,
+            options: $options,
+            q: $q,
+            valueCanBeNull: true
+        );
+    }
+
+    /**
+     * Summary of applyWhereHasNull
+     *
+     * @param string $relationship
+     * @param array|string $field
+     * @param bool $isOrWhere
+     * @param bool $invert
+     * @param ?EloquentQueryBuilder $q $q
+     *
+     * @return void
+     */
+    protected function applyWhereHasNull(
+        string $relationship,
+        array|string $field,
+        bool $isOrWhere = false,
+        bool $invert = false,
+        ?EloquentQueryBuilder $q = null,
+    ): void {
+        $this->applyFilter(
+            filterClass: ApplyWhereHasNull::class,
+            field: $field,
+            paramName: null,
+            options: [
+                'is_or_where' => $isOrWhere,
+                'relationship' => $relationship,
+                'invert' => $invert,
+            ],
+            q: $q,
+            valueCanBeNull: true
+        );
+    }
+
+    /**
+     * Summary of applyExcludeByNestedRelation
+     *
+     * @param string $field
+     * @param string $relation
+     * @param string $nestedRelation
+     * @param ?string $paramName
+     * @param bool $isOrWhere
+     * @param ?EloquentQueryBuilder $q $q
+     *
+     * @return void
+     */
+    protected function applyExcludeByNestedRelation(
+        string $field,
+        string $relation,
+        string $nestedRelation,
+        ?string $paramName = null,
+        bool $isOrWhere = false,
+        ?EloquentQueryBuilder $q = null,
+    ): void {
+        $options = [
+            'relation' => $relation,
+            'nested_relation' => $nestedRelation,
+            'is_or_where' => $isOrWhere
+        ];
+
+        $this->applyFilter(
+            filterClass: ApplyExcludeByNestedRelation::class,
+            field: $field,
+            paramName: $paramName,
+            options: $options,
+            q: $q
         );
     }
 
@@ -1260,6 +1449,84 @@ abstract class BaseQueryBuilder
             $paramName,
             ['is_or_where' => $isOrWhere],
             $q
+        );
+    }
+
+    /**
+     * applyTrue
+     *
+     * @param array|string $field
+     * @param bool $isOrWhere
+     * @param bool $useOrWhereInArray
+     * @param ?EloquentQueryBuilder $q
+     *
+     * @return void
+     */
+    public function applyTrue(
+        array|string $field,
+        bool $isOrWhere = false,
+        bool $useOrWhereInArray = false,
+        ?EloquentQueryBuilder $q = null
+    ): void {
+        if (is_array($field)) {
+            $this->applyRecursiveMethod(
+                method: 'applyTrue',
+                field: $field,
+                paramName: null,
+                isOrWhere: $isOrWhere,
+                useOrWhereInArray: $useOrWhereInArray,
+                q: $q,
+            );
+
+            return;
+        }
+
+        $this->applyFilter(
+            filterClass: ApplyTrue::class,
+            field: $field,
+            paramName: null,
+            options: ['is_or_where' => $isOrWhere],
+            q: $q,
+            valueCanBeNull: true
+        );
+    }
+
+    /**
+     * Summary of applyFalse
+     *
+     * @param array|string $field
+     * @param bool $isOrWhere
+     * @param bool $useOrWhereInArray
+     * @param ?EloquentQueryBuilder $q
+     *
+     * @return void
+     */
+    public function applyFalse(
+        array|string $field,
+        bool $isOrWhere = false,
+        bool $useOrWhereInArray = false,
+        ?EloquentQueryBuilder $q = null
+    ): void {
+        if (is_array($field)) {
+            $this->applyRecursiveMethod(
+                method: 'applyFalse',
+                field: $field,
+                paramName: null,
+                isOrWhere: $isOrWhere,
+                useOrWhereInArray: $useOrWhereInArray,
+                q: $q,
+            );
+
+            return;
+        }
+
+        $this->applyFilter(
+            filterClass: ApplyFalse::class,
+            field: $field,
+            paramName: null,
+            options: ['is_or_where' => $isOrWhere],
+            q: $q,
+            valueCanBeNull: true
         );
     }
 
@@ -3038,11 +3305,12 @@ abstract class BaseQueryBuilder
         ?string $paramName = null,
         mixed $options = [],
         ?EloquentQueryBuilder $q = null,
+        bool $valueCanBeNull = false
     ): void {
         $paramName ??= $field;
         $value = $this->params[$paramName] ?? null;
 
-        if ($value !== null) {
+        if ($value !== null || $valueCanBeNull) {
             (new $filterClass())->apply(
                 $q ?? $this->query,
                 $field,
