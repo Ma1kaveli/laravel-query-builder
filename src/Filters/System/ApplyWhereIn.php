@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\System;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,9 +29,9 @@ class ApplyWhereIn implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
-        if (!is_array($value)) {
+        if (!CheckTypes::isArrayWithElements($value)) {
             $value = [$value];
         }
 

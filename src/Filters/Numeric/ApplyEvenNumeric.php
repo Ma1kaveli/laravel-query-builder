@@ -3,6 +3,7 @@
 namespace QueryBuilder\Filters\Numeric;
 
 use QueryBuilder\Interfaces\FilterInterface;
+use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
@@ -28,9 +29,13 @@ class ApplyEvenNumeric implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
         $fieldWithTable = $this->getFieldWithTable($query, $field);
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereRaw(
             "MOD($fieldWithTable, 2) = 0",

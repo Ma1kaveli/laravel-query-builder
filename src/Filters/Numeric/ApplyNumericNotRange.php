@@ -29,11 +29,11 @@ class ApplyNumericNotRange implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isNumberRange($value)) {
+        if (!CheckTypes::isNumberRange($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereNotBetween(
             $this->getFieldWithTable($query, $field),

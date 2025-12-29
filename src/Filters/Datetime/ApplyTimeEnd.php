@@ -29,11 +29,11 @@ class ApplyTimeEnd implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isTimeFormat($value)) {
+        if (!CheckTypes::isTimeFormat($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereTime(
             $this->getFieldWithTable($query, $field),

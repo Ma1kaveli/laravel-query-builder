@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\Datetime;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
@@ -29,8 +30,12 @@ class ApplyLastYear implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
         $subYear = Carbon::now()->subYear();
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereBetween(
             $this->getFieldWithTable($query, $field),

@@ -3,11 +3,12 @@
 namespace QueryBuilder\Filters\System;
 
 use QueryBuilder\Interfaces\FilterInterface;
+use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use QueryBuilder\Helpers\CheckTypes;
+use Closure;
 
 class ApplyWhereHas implements FilterInterface
 {
@@ -31,8 +32,12 @@ class ApplyWhereHas implements FilterInterface
     ): void {
         if (!CheckTypes::isString($field)) return;
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
         $subQuery = $options['sub_query'];
+
+        if (empty($subQuery) && $subQuery instanceof Closure && is_callable($subQuery)) {
+            return;
+        }
 
         $query->when(
             $isOrWhere,

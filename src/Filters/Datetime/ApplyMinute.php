@@ -8,6 +8,7 @@ use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use QueryBuilder\Factories\Datetime\DateTimeExpressionFactory;
 
 class ApplyMinute implements FilterInterface
 {
@@ -29,13 +30,15 @@ class ApplyMinute implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isMinute($value)) {
+        if (!CheckTypes::isMinute($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $fieldWithTable = $this->getFieldWithTable($query, $field);
-        $query->whereRaw("MINUTE({$fieldWithTable}) = ?", [ $value ], $isOrWhere ? 'or' : 'and');
+        $expr = DateTimeExpressionFactory::make()->minute($fieldWithTable);
+
+        $query->whereRaw("$expr = ?", [$value], $isOrWhere ? 'or' : 'and');
     }
 }

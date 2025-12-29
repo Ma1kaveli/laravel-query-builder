@@ -29,11 +29,11 @@ class ApplyArrayInteger implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isIntegerArray($value)) {
+        if (!CheckTypes::isIntegerArray($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereIn(
             $this->getFieldWithTable($query, $field),

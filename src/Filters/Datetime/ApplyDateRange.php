@@ -29,11 +29,11 @@ class ApplyDateRange implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isDateFormatRange($value)) {
+        if (!CheckTypes::isDateFormatRange($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereBetween(
             $this->getFieldWithTable($query, $field),

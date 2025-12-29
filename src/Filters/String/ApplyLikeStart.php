@@ -30,7 +30,10 @@ class ApplyLikeStart implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isString($value) || $value === '') {
+        if ((!CheckTypes::isStringArray($field) && !CheckTypes::isString($field))
+            || !CheckTypes::isString($value)
+            || $value === ''
+        ) {
             return;
         }
 
@@ -40,11 +43,11 @@ class ApplyLikeStart implements FilterInterface
             trim(strtolower($value))
         );
 
-        if (!is_array($field)) {
+        if (!CheckTypes::isStringArray($field)) {
             $field = [$field];
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->where(function ($q) use ($value, $field, $query) {
             foreach ($field as $key => $el) {

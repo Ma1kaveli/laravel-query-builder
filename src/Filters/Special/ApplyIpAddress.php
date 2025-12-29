@@ -29,14 +29,17 @@ class ApplyIpAddress implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $ip = $options['ip'];
-        $cidr = $options['cidr'];
+        $ip = $options['ip'] ?? null;
+        $cidr = $options['cidr'] ?? null;
 
-        if (!CheckTypes::isString($ip) || !CheckTypes::isString($cidr)) {
+        if (!CheckTypes::isString($ip)
+            || !CheckTypes::isString($cidr)
+            || !CheckTypes::isString($field)
+        ) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $fieldWithTable = $this->getFieldWithTable($query, $field);
 

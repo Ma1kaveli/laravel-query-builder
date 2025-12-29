@@ -29,11 +29,11 @@ class ApplyJsonKey implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isString($value) || $value === '') {
+        if (!CheckTypes::isString($field) || !CheckTypes::isString($value) || $value === '') {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereNotNull("{$field}->{$value}", $isOrWhere ? 'or' : 'and');
     }

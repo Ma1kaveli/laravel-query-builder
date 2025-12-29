@@ -29,11 +29,11 @@ class ApplyDay implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isDay($value)) {
+        if (!CheckTypes::isDay($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereDay(
             $this->getFieldWithTable($query, $field),

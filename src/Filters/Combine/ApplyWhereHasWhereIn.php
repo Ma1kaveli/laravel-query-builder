@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\Combine;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,11 +29,15 @@ class ApplyWhereHasWhereIn implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!is_array($value)) {
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
+        if (!CheckTypes::isArrayWithElements($value)) {
             $value = [$value];
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
         $relationship = $options['relationship'];
 
         $query->when(

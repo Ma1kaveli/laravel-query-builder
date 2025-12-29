@@ -3,6 +3,7 @@
 namespace QueryBuilder\Filters\System;
 
 use QueryBuilder\Interfaces\FilterInterface;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -26,6 +27,10 @@ class ApplyWith implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($value) && !CheckTypes::isArrayWithElements($value)) {
+            return;
+        }
+
         $query->with($value);
     }
 }

@@ -34,7 +34,7 @@ class ApplyExistsByBoolean implements FilterInterface
         $isOrWhere       = $options['is_or_where'] ?? false;
         $invert          = $options['invert'] ?? false;
 
-        if (!$filterableField) {
+        if (!CheckTypes::isString($filterableField)) {
             return;
         }
 
@@ -42,11 +42,9 @@ class ApplyExistsByBoolean implements FilterInterface
             if (!$canBeNull) {
                 return;
             }
-
-            return;
         }
 
-        if (!CheckTypes::isBool($value)) {
+        if (!CheckTypes::isBool($value) && $value !== null) {
             return;
         }
 

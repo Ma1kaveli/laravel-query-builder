@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\Relation;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,6 +29,10 @@ class ApplyHasRelation implements FilterInterface
         mixed $value,
         mixed $options = [],
     ): void {
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
         if (!method_exists($query->getModel(), $field)) return;
 
         $query->has($field);

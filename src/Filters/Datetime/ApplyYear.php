@@ -29,11 +29,11 @@ class ApplyYear implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isYear($value)) {
+        if (!CheckTypes::isYear($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereYear(
             $this->getFieldWithTable($query, $field),

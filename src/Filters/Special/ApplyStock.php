@@ -29,11 +29,11 @@ class ApplyStock implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isNumeric($value)) {
+        if (!CheckTypes::isNumeric($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->where(
             $this->getFieldWithTable($query, $field),

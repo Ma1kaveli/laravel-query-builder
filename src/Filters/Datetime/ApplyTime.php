@@ -29,13 +29,13 @@ class ApplyTime implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isTimeFormat($value)) {
+        if (!CheckTypes::isString($field) || !CheckTypes::isTimeFormat($value)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
-        $query->whereIn(
+        $query->where(
             $this->getFieldWithTable($query, $field),
             $value,
             $isOrWhere ? 'or' : 'and'

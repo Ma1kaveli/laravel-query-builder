@@ -29,7 +29,7 @@ class ApplyRegex implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isString($value) || $value === '') {
+        if (!CheckTypes::isString($value) || $value === '' || !CheckTypes::isString($field)) {
             return;
         }
 
@@ -37,7 +37,7 @@ class ApplyRegex implements FilterInterface
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->where(
             $this->getFieldWithTable($query, $field),

@@ -29,11 +29,11 @@ class ApplyArrayDouble implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isDoubleArray($value)) {
+        if (!CheckTypes::isDoubleArray($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereIn(
             $this->getFieldWithTable($query, $field),

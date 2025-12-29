@@ -28,7 +28,7 @@ class ApplyWhereHasNull implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
         $relationship = $options['relationship'];
         $invert = $options['invert'] ?? false;
 

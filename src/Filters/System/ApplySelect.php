@@ -7,6 +7,7 @@ use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use QueryBuilder\Helpers\CheckTypes;
 
 class ApplySelect implements FilterInterface
 {
@@ -28,6 +29,10 @@ class ApplySelect implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isStringArray($value)) {
+            return;
+        }
+
         $query->select($value);
     }
 }

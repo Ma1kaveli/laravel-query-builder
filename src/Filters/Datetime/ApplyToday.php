@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\Datetime;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,7 +29,12 @@ class ApplyToday implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
+        $isOrWhere = $options['is_or_where'] ?? false;
+
         $query->whereToday(
             $this->getFieldWithTable($query, $field),
             $isOrWhere ? 'or' : 'and'

@@ -29,11 +29,17 @@ class ApplyMultipleOf implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isNumeric($value) || $divisor = (int)$value === 0) {
+
+        if (!CheckTypes::isNumeric($value)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $divisor = (int)$value;
+        if ($divisor === 0 || !CheckTypes::isString($field)) {
+            return;
+        }
+
+        $isOrWhere = $options['is_or_where'] ?? false;
         $fieldWithTable = $this->getFieldWithTable($query, $field);
 
         $query->whereRaw(

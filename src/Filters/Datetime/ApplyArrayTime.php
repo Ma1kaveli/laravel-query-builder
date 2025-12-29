@@ -29,12 +29,16 @@ class ApplyArrayTime implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
         if (!CheckTypes::isTimeFormatArray($value)) {
             return;
         }
 
         $fieldWithTable = $this->getFieldWithTable($query, $field);
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->where(function ($q) use ($fieldWithTable, $value) {
             foreach ($value as $index => $time) {

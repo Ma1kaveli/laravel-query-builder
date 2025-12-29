@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\Datetime;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,8 +29,12 @@ class ApplyCurrentMinute implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
         $fieldWithTable = $this->getFieldWithTable($query, $field);
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereRaw(
             "MINUTE($fieldWithTable) = MINUTE(CURRENT_TIME())",

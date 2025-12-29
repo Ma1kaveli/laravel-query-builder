@@ -7,6 +7,7 @@ use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use QueryBuilder\Helpers\CheckTypes;
 
 class ApplyDeepWhereHasWhere implements FilterInterface
 {
@@ -28,11 +29,15 @@ class ApplyDeepWhereHasWhere implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        if (!CheckTypes::isString($value)) {
+            return;
+        }
+
+        $isOrWhere = $options['is_or_where'] ?? false;
         $isDeepOrWhere = $options['is_deep_or_where'];
         $relationship = $options['relationship'];
 
-        if (!is_array($field)) {
+        if (!CheckTypes::isArrayWithElements($field)) {
             $field = [$field];
         }
 

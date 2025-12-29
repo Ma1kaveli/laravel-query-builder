@@ -7,6 +7,7 @@ use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use QueryBuilder\Helpers\CheckTypes;
 
 class ApplyWhereHasWhere implements FilterInterface
 {
@@ -28,9 +29,13 @@ class ApplyWhereHasWhere implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($value) || !CheckTypes::isString($field)) {
+            return;
+        }
+
         $value = trim(strtolower($value));
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
         $relationship = $options['relationship'];
 
         $query->when(

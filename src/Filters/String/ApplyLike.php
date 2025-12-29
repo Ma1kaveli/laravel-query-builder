@@ -5,7 +5,6 @@ namespace QueryBuilder\Filters\String;
 use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -13,13 +12,12 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 class ApplyLike implements FilterInterface
 {
     use GetTableField;
-
     /**
      * apply
      *
      * @param EloquentQueryBuilder|QueryBuilder $query
      * @param string|array|null $field = null
-     * @param mixed $value
+     * @param mixed $value = null
      * @param mixed $options = []
      *
      * @return void
@@ -27,30 +25,28 @@ class ApplyLike implements FilterInterface
     public function apply(
         EloquentQueryBuilder|QueryBuilder $query,
         string|array|null $field = null,
-        mixed $value,
+        mixed $value = null,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isString($value) || $value === '') {
+        if ( !( CheckTypes::isString($field) || CheckTypes::isStringArray($field) )
+            || !CheckTypes::isString($value)
+            || $value === ''
+        ) {
             return;
         }
-
         $value = str_replace(
             ['%', '_'],
             ['\%', '\_'],
             trim(strtolower($value))
         );
-
-        if (!is_array($field)) {
+        if (!CheckTypes::isStringArray($field)) {
             $field = [$field];
         }
-
-        $isOrWhere = $options['is_or_where'];
-
+        $isOrWhere = $options['is_or_where'] ?? false;
         $query->where(function ($q) use ($value, $field, $query) {
             foreach ($field as $key => $el) {
                 $method = $key === 0 ? 'where' : 'orWhere';
                 $fieldWithTable = $this->getFieldWithTable($query, $el);
-
                 $q->{$method}(function($subQ) use ($value, $fieldWithTable) {
                     $subQ->where(
                         DB::raw("LOWER({$fieldWithTable})"),

@@ -29,23 +29,32 @@ class ApplySortBy implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $sortBy = $options['sort_by'];
-        $descending = $options['descending'];
-        $availableSorts = $options['available_sorts'];
-        $defaultField = $options['default_field'];
+        $sortBy = $options['sort_by'] ?? null;
+        $descending = $options['descending'] ?? 'false';
+        $availableSorts = $options['available_sorts'] ?? [];
+        $defaultField = $options['default_field'] ?? null;
 
-        $isAvailableSortBy = in_array($sortBy, $availableSorts);
-
-        if (!CheckTypes::isString($sortBy) || ($isAvailableSortBy && ($defaultField === null))) {
+        if (!CheckTypes::isString($sortBy) && $sortBy !== null) {
             return;
         }
 
-        $direction = (!CheckTypes::isString($descending) || $descending === 'false')
-            ? 'asc' : 'desc';
-
-        if (!$isAvailableSortBy) {
+        if ($sortBy === null) {
+            if (!CheckTypes::isString($defaultField)) {
+                return;
+            }
             $sortBy = $defaultField;
         }
+
+        $isAvailable = in_array($sortBy, $availableSorts, true);
+
+        if (!$isAvailable) {
+            if (!CheckTypes::isString($defaultField)) {
+                return;
+            }
+            $sortBy = $defaultField;
+        }
+
+        $direction = ($descending === 'true') ? 'desc' : 'asc';
 
         $query->orderBy($sortBy, $direction);
     }

@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\Relation;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,15 +29,11 @@ class ApplyExcludeByNestedRelation implements FilterInterface
         mixed $value,
         mixed $options = [],
     ): void {
-        if (!$value) {
-            return;
-        }
-
-        $relation       = $options['relation'];
-        $nestedRelation = $options['nested_relation'];
+        $relation       = $options['relation'] ?? null;
+        $nestedRelation = $options['nested_relation'] ?? null;
         $isOrWhere      = $options['is_or_where'] ?? false;
 
-        if (!$relation || !$nestedRelation) {
+        if (!CheckTypes::isString($relation) || !CheckTypes::isString($nestedRelation)) {
             return;
         }
 

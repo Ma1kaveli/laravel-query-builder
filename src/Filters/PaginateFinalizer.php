@@ -27,10 +27,12 @@ class PaginateFinalizer implements FinalizerInterface
         $columns =  $options['columns'];
         $canAllRows = $options['can_all_rows'];
         $pageName = $options['page_name'];
+        $maxRowsPerPage = $options['max_rows_per_page'];
 
         if (
             !CheckTypes::isInteger($rowsPerPage)
             || (!$canAllRows && $rowsPerPage === -1)
+            || $rowsPerPage > $maxRowsPerPage
         ) {
             $rowsPerPage = 25;
         }

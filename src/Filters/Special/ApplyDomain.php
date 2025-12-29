@@ -24,22 +24,22 @@ class ApplyDomain implements FilterInterface
      * @return void
      */
     public function apply(
-        EloquentQueryBuilder|QueryBuilder $queryyy,
+        EloquentQueryBuilder|QueryBuilder $query,
         string|array|null $field = null,
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isString($value)
-            && !CheckTypes::isStringArray($value)
+        if (!CheckTypes::isString($field)
+            || (!CheckTypes::isString($value) && !CheckTypes::isStringArray($value))
         ) {
             return;
         }
 
-        if (!is_array($value)) {
+        if (!CheckTypes::isStringArray($value)) {
             $value = [$value];
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $fieldWithTable = $this->getFieldWithTable($query, $field);
 

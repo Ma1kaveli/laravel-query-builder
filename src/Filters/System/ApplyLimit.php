@@ -4,6 +4,7 @@ namespace QueryBuilder\Filters\System;
 
 use QueryBuilder\Interfaces\FilterInterface;
 use QueryBuilder\Traits\GetTableField;
+use QueryBuilder\Helpers\CheckTypes;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -28,6 +29,10 @@ class ApplyLimit implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isInteger($value)) {
+            return;
+        }
+
         $query->limit($value);
     }
 }

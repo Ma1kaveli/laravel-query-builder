@@ -29,7 +29,7 @@ class ApplyGeoBoundingBox implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $lonField = $options['lon_field'];
         $latField = $options['lat_field'];

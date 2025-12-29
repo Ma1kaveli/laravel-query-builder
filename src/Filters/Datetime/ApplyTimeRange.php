@@ -29,12 +29,12 @@ class ApplyTimeRange implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isTimeFormatRange($value)) {
+        if (!CheckTypes::isTimeFormatRange($value) || !CheckTypes::isString($field)) {
             return;
         }
 
         $fieldWithTable = $this->getFieldWithTable($query, $field);
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->where(function ($q) use ($fieldWithTable, $value) {
             $q->whereTime($fieldWithTable, '>=', reset($value))

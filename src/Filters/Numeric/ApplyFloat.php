@@ -29,11 +29,11 @@ class ApplyFloat implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isFloat($value)) {
+        if (!CheckTypes::isFloat($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->where(
             $this->getFieldWithTable($query, $field),

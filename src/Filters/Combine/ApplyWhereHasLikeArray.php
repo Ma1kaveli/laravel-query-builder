@@ -3,6 +3,7 @@
 namespace QueryBuilder\Filters\Combine;
 
 use QueryBuilder\Interfaces\FilterInterface;
+use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Support\Facades\DB;
@@ -29,14 +30,18 @@ class ApplyWhereHasLikeArray implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!is_array($field)) {
+        if (!CheckTypes::isString($value)) {
+            return;
+        }
+
+        if (!CheckTypes::isArrayWithElements($field)) {
             $field = [$field];
         }
 
         $value = trim(strtolower($value));
 
         $isDeepOrWhere = $options['is_deep_or_where'];
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
         $relationship = $options['relationship'];
 
         $likeFunc = function ($q) use ($field, $isDeepOrWhere, $value) {

@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Carbon\Month;
 use DateTime;
 use Exception;
-use Hamcrest\Type\IsDouble;
+use Illuminate\Support\Facades\Config;
 
 class CheckTypes {
     /**
@@ -31,12 +31,20 @@ class CheckTypes {
     static public function isFloat(mixed $value): bool
     {
         try {
-            if (!is_string($value) || self::isInteger($value)) {
+            if (is_float($value)) {
+                return true;
+            }
+
+            if (is_int($value)) {
                 return false;
             }
 
-            if (is_float($value)) {
-                return true;
+            if (!is_string($value) || $value === '') {
+                return false;
+            }
+
+            if (self::isInteger($value)) {
+                return false;
             }
 
             return filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
@@ -52,19 +60,7 @@ class CheckTypes {
      */
     static public function isDouble(mixed $value): bool
     {
-        try {
-            if (!is_string($value) || self::isInteger($value)) {
-                return false;
-            }
-
-            if (is_double($value)) {
-                return true;
-            }
-
-            return filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
-        } catch (Exception $e) {
-            return false;
-        }
+        return self::isFloat($value);
     }
 
     /**
@@ -120,20 +116,26 @@ class CheckTypes {
      */
     static public function isDateFormat(mixed $value): bool
     {
-        $dateFormats = config(
-            'query-builder.check-types.date-formats',
-            ['Y-m-d', 'd.m.Y', 'm/d/Y', 'd F Y', 'Y-m-d H:i:s']
-        );
-        foreach ([$dateFormats, DateTime::ATOM] as $format) {
-            try {
-                $date = Carbon::createFromFormat($format, $value);
-                return $date && $date->format($format) === $value;
-            } catch (Exception) {
-                continue;
-            }
-        }
+        try {
+            $dateFormats = Config::get(
+                'query-builder.check-types.date-formats',
+                ['Y-m-d', 'd.m.Y', 'm/d/Y', 'd F Y', 'Y-m-d H:i:s']
+            );
 
-        return false;
+            foreach (array_merge($dateFormats, [DateTime::ATOM]) as $format) {
+                try {
+                    $date = Carbon::createFromFormat($format, $value);
+
+                    return $date && $date->format($format) === $value;
+                } catch (Exception) {
+                    continue;
+                }
+            }
+
+            return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -142,20 +144,26 @@ class CheckTypes {
      * @return bool
      */
     static public function isTimeFormat(mixed $value): bool {
-        $timeFormats = config(
-            'query-builder.check-types.time-formats',
-            ['H:i', 'H:i:s', 'H:i:s.u']
-        );
-        foreach ($timeFormats as $format) {
-            try {
-                $time = Carbon::createFromFormat($format, $value);
-                return $time && $time->format($format) === $value;
-            } catch (Exception) {
-                continue;
-            }
-        }
+        try {
+            $timeFormats = Config::get(
+                'query-builder.check-types.time-formats',
+                ['H:i', 'H:i:s', 'H:i:s.u']
+            );
 
-        return false;
+            foreach ($timeFormats as $format) {
+                try {
+                    $time = Carbon::createFromFormat($format, $value);
+
+                    return $time && $time->format($format) === $value;
+                } catch (Exception) {
+                    continue;
+                }
+            }
+
+            return false;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     /**
@@ -165,10 +173,10 @@ class CheckTypes {
      */
     static public function isIntegerArray(mixed $data): bool
     {
-        if (!is_array($data)) return false;
+        if (!is_array($data) || count($data) === 0) return false;
 
         foreach ($data as $el) {
-            if (!CheckTypes::isInteger($el)) return false;
+            if (!self::isInteger($el)) return false;
         }
 
         return true;
@@ -181,10 +189,10 @@ class CheckTypes {
      */
     static public function isFloatArray(mixed $data): bool
     {
-        if (!is_array($data)) return false;
+        if (!is_array($data) || count($data) === 0) return false;
 
         foreach ($data as $el) {
-            if (!CheckTypes::isFloat($el)) return false;
+            if (!self::isFloat($el)) return false;
         }
 
         return true;
@@ -197,13 +205,7 @@ class CheckTypes {
      */
     static public function isDoubleArray(mixed $data): bool
     {
-        if (!is_array($data)) return false;
-
-        foreach ($data as $el) {
-            if (!CheckTypes::isDouble($el)) return false;
-        }
-
-        return true;
+        return self::isFloatArray($data);
     }
 
     /**
@@ -213,14 +215,15 @@ class CheckTypes {
      */
     static public function isNumericArray(mixed $data): bool
     {
-        if (!is_array($data)) return false;
+        if (!is_array($data) || count($data) === 0) return false;
 
         foreach ($data as $el) {
-            if (!CheckTypes::isNumeric($el)) return false;
+            if (!self::isNumeric($el)) return false;
         }
 
         return true;
     }
+
     /**
      * isNumberRange
      *
@@ -240,10 +243,10 @@ class CheckTypes {
      */
     static public function isStringArray(mixed $data): bool
     {
-        if (!is_array($data)) return false;
+        if (!is_array($data) || count($data) === 0) return false;
 
         foreach ($data as $el) {
-            if (!CheckTypes::isString($el)) return false;
+            if (!self::isString($el)) return false;
         }
 
         return true;
@@ -256,10 +259,10 @@ class CheckTypes {
      */
     static public function isDateFormatArray(mixed $data): bool
     {
-        if (!is_array($data)) return false;
+        if (!is_array($data) || count($data) === 0) return false;
 
         foreach ($data as $el) {
-            if (!CheckTypes::isDateFormat($el)) return false;
+            if (!self::isDateFormat($el)) return false;
         }
 
         return true;
@@ -282,10 +285,10 @@ class CheckTypes {
      */
     static public function isTimeFormatArray(mixed $data): bool
     {
-        if (!is_array($data)) return false;
+        if (!is_array($data) || count($data) === 0) return false;
 
         foreach ($data as $el) {
-            if (!CheckTypes::isTimeFormat($el)) return false;
+            if (!self::isTimeFormat($el)) return false;
         }
 
         return true;
@@ -326,13 +329,7 @@ class CheckTypes {
      */
     static public function isMonth(mixed $value): bool
     {
-        try {
-            return self::isInteger($value)
-                && $value >= Month::January
-                && $value <= Month::December;
-        } catch (Exception $e) {
-            return false;
-        }
+        return self::isInteger($value) && $value >= 1 && $value <= 12;
     }
 
     /**
@@ -342,12 +339,7 @@ class CheckTypes {
      */
     static public function isDay(mixed $value): bool
     {
-        try {
-            return self::isInteger($value)
-                && $value >= 1 && $value <= 31;
-        } catch (Exception $e) {
-            return false;
-        }
+        return self::isInteger($value) && $value >= 1 && $value <= 31;
     }
 
     /**
@@ -357,12 +349,7 @@ class CheckTypes {
      */
     static public function isMinute(mixed $value): bool
     {
-        try {
-            return self::isInteger($value)
-                && $value >= 0 && $value <= 59;
-        } catch (Exception $e) {
-            return false;
-        }
+        return self::isInteger($value) && $value >= 0 && $value <= 59;
     }
 
     /**
@@ -372,26 +359,7 @@ class CheckTypes {
      */
     static public function isHour(mixed $value): bool
     {
-        try {
-            return self::isInteger($value)
-                && $value >= 0 && $value <= 23;
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * @param mixed $data
-
-     * @return bool
-     */
-    static public function isRange(mixed $data): bool
-    {
-        try {
-            return self::isNumericArray($data) && count($data) === 2;
-        } catch (Exception $e) {
-            return false;
-        }
+        return self::isInteger($value) && $value >= 0 && $value <= 23;
     }
 
     /**

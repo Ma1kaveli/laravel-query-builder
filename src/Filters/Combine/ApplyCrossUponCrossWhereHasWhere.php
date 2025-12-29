@@ -9,6 +9,34 @@ use QueryBuilder\Traits\GetTableField;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
+/**
+ * Class ApplyCrossUponCrossWhereHasWhere
+ *
+ * Фильтр для Eloquent/Query Builder, который создаёт кросс-комбинацию условий
+ * с использованием whereHas для двух связанных моделей.
+ *
+ * Опции ($options):
+ * - 'term_1'               : array     Значения для первой связи
+ * - 'term_2'               : array     Значения для второй связи
+ * - 'relationship_1'       : string    Имя первой связи
+ * - 'relationship_2'       : string    Имя второй связи
+ * - 'field_1'              : string    Поле для первой связи
+ * - 'field_2'              : string    Поле для второй связи
+ * - 'is_or_where'          : bool      Логика объединения внешних условий (or/and)
+ *
+ * Пример:
+ * $query = Model::query();
+ * $filter = new ApplyCrossUponCrossWhereHasWhere();
+ * $filter->apply($query, null, null, [
+ *     'term_1' => ['a','b'],
+ *     'term_2' => ['x','y'],
+ *     'relationship_1' => 'rel1',
+ *     'relationship_2' => 'rel2',
+ *     'field_1' => 'field1',
+ *     'field_2' => 'field2',
+ *     'is_or_where' => false
+ * ]);
+ */
 class ApplyCrossUponCrossWhereHasWhere implements FilterInterface
 {
     use GetTableField;
@@ -29,7 +57,7 @@ class ApplyCrossUponCrossWhereHasWhere implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $term1 = $options['term_1'];
         $term2 = $options['term_2'];

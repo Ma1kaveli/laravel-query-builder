@@ -29,7 +29,7 @@ class ApplyGeoRadius implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $lonField = $options['lon_field'];
         $latField = $options['lat_field'];
@@ -38,8 +38,10 @@ class ApplyGeoRadius implements FilterInterface
         $radius = $options['radius'];
 
         if (
-            !CheckTypes::isString($lat)
+            !CheckTypes::isString($lonField)
+                || !CheckTypes::isString($latField)
                 || !CheckTypes::isString($lon)
+                || !CheckTypes::isString($lat)
                 || !CheckTypes::isString($radius)
         ) {
             return;

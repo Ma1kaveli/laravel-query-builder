@@ -29,11 +29,15 @@ class ApplyArrayDate implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($field)) {
+            return;
+        }
+
         if (!CheckTypes::isDateFormatArray($value)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereIn(
             $this->getFieldWithTable($query, $field),

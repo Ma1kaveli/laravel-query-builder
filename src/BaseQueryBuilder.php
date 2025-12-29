@@ -201,6 +201,7 @@ abstract class BaseQueryBuilder
      * @param array|string $columns = ['*']
      * @param string $rowsPerPageName = 'rows_per_page'
      * @param string $pageName = 'page'
+     * @param int $maxRowsPerPage = 100
      *
      * @return LengthAwarePaginator
      */
@@ -209,12 +210,14 @@ abstract class BaseQueryBuilder
         array|string $columns = ['*'],
         string $rowsPerPageName = 'rows_per_page',
         string $pageName = 'page',
+        int $maxRowsPerPage = 100
     ): LengthAwarePaginator {
         $options = [
             'rows_per_page' => $this->params[$rowsPerPageName],
             'can_all_rows' => $canAllRows,
             'columns' => $columns,
-            'page_name' => $pageName
+            'page_name' => $pageName,
+            'max_rows_per_page' => $maxRowsPerPage
         ];
 
         return (new PaginateFinalizer())->apply($this->query, $options);

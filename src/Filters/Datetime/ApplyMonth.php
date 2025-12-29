@@ -29,11 +29,11 @@ class ApplyMonth implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isMonth($value)) {
+        if (!CheckTypes::isMonth($value) || !CheckTypes::isString($field)) {
             return;
         }
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereMonth(
             $this->getFieldWithTable($query, $field),

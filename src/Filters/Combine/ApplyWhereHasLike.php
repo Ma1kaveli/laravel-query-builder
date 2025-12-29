@@ -3,6 +3,7 @@
 namespace QueryBuilder\Filters\Combine;
 
 use QueryBuilder\Interfaces\FilterInterface;
+use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Support\Facades\DB;
@@ -29,9 +30,13 @@ class ApplyWhereHasLike implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
+        if (!CheckTypes::isString($field) || !CheckTypes::isString($value)) {
+            return;
+        }
+
         $value = trim(strtolower($value));
 
-        $isOrWhere = $options['is_or_where'];
+        $isOrWhere = $options['is_or_where'] ?? false;
         $relationship = $options['relationship'];
 
         $likeFunc = fn ($q) => $q->where(DB::raw("LOWER({$field})"), 'LIKE' ,"%{$value}%");

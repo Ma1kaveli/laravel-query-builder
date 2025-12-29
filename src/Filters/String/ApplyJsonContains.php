@@ -3,6 +3,7 @@
 namespace QueryBuilder\Filters\String;
 
 use QueryBuilder\Interfaces\FilterInterface;
+use QueryBuilder\Helpers\CheckTypes;
 use QueryBuilder\Traits\GetTableField;
 
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
@@ -28,7 +29,11 @@ class ApplyJsonContains implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        $isOrWhere = $options['is_or_where'];
+        if (!CheckTypes::isString($value) || !CheckTypes::isString($field)) {
+            return;
+        }
+
+        $isOrWhere = $options['is_or_where'] ?? false;
 
         $query->whereJsonContains(
             $this->getFieldWithTable($query, $field),
