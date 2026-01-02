@@ -6,11 +6,6 @@ return [
         'time-formats' => ['H:i', 'H:i:s', 'H:i:s.u']
     ],
 
-    'repository' => [
-        'user_id_field' => 'id',
-        'is_root_field' => 'is_superadministrator',
-    ],
-
     'pagination_map' => [
         'current_page' => 'current_page',
         'first_page_url' => 'first_page_url',

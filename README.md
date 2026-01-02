@@ -20,12 +20,6 @@
 composer require makaveli/laravel-query-builder
 ```
 
-Рекомендуется сразу установить зависимость (большинство проектов её используют вместе):
-
-```bash
-composer require makaveli/laravel-core
-```
-
 (Опционально) Опубликовать конфиг, если хотите поменять дефолтные настройки:
 
 ```bash
