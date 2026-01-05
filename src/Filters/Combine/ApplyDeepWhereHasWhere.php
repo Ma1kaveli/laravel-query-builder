@@ -29,7 +29,7 @@ class ApplyDeepWhereHasWhere implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isString($value)) {
+        if (!CheckTypes::isString($field) && !CheckTypes::isStringArray($field)) {
             return;
         }
 
@@ -37,7 +37,7 @@ class ApplyDeepWhereHasWhere implements FilterInterface
         $isDeepOrWhere = $options['is_deep_or_where'];
         $relationship = $options['relationship'];
 
-        if (!CheckTypes::isArrayWithElements($field)) {
+        if (!CheckTypes::isStringArray($field)) {
             $field = [$field];
         }
 

@@ -29,11 +29,11 @@ class ApplyWhereHasWhere implements FilterInterface
         mixed $value,
         mixed $options = []
     ): void {
-        if (!CheckTypes::isString($value) || !CheckTypes::isString($field)) {
+        if (!CheckTypes::isString($field)) {
             return;
         }
 
-        $value = trim(strtolower($value));
+        $value = CheckTypes::isString($value) ? trim(strtolower($value)) : $value;
 
         $isOrWhere = $options['is_or_where'] ?? false;
         $relationship = $options['relationship'];
